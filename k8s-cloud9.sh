@@ -44,3 +44,7 @@ echo "alias kgp='kubectl get pods'" | tee -a /home/ec2-user/.bashrc
 echo "alias tfi='terraform init'" | tee -a /home/ec2-user/.bashrc
 echo "alias tfp='terraform plan'" | tee -a /home/ec2-user/.bashrc
 echo "alias tfy='terraform apply --auto-approve'" | tee -a /home/ec2-user/.bashrc
+echo "alias kget='kubectl get'" | tee -a /home/ec2-user/.bashrc
+echo "alias kdesc='kubectl describe'" | tee -a /home/ec2-user/.bashrc
+echo "alias klogs='kubectl logs'" | tee -a /home/ec2-user/.bashrc
+
