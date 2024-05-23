@@ -6,7 +6,7 @@ pwd
 export HOME=/home/ec2-user
 echo '=== INSTALL Some Tools ==='
 sudo yum -y -q install jq gettext bash-completion moreutils
-echo '=== Configure workshop code ==='
+echo '=== Configure code ==='
 pip install --user --upgrade awscli
 curl 'https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip' -o 'awscliv2.zip'
 unzip awscliv2.zip -d /tmp
@@ -44,21 +44,3 @@ echo "alias kgp='kubectl get pods'" | tee -a /home/ec2-user/.bashrc
 echo "alias tfi='terraform init'" | tee -a /home/ec2-user/.bashrc
 echo "alias tfp='terraform plan'" | tee -a /home/ec2-user/.bashrc
 echo "alias tfy='terraform apply --auto-approve'" | tee -a /home/ec2-user/.bashrc
-source /home/ec2-user/.bashrc
-!Sub |
-                  mkdir -p /home/ec2-user/environment/code-eks-blueprint ; 
-                  cd /home/ec2-user/environment/code-eks-blueprint ; 
-                  echo aws s3 ls s3://${AssetsBucketName}/${AssetsBucketPrefix}/ ;
-                  aws s3 ls s3://${AssetsBucketName}/${AssetsBucketPrefix} ;
-                  aws s3 cp s3://${AssetsBucketName}/${AssetsBucketPrefix}code-eks-blueprint.zip .
-                  unzip -o code-eks-blueprint.zip -d ~/environment/code-eks-blueprint
-                - chown -R 1000:1000 /home/ec2-user/environment/code-eks-blueprint ; ls -la
-                - echo '=== Exporting ENV Vars ==='
-                - export AWS_ACCOUNT_ID="$(aws sts get-caller-identity --query Account --output text)" && echo "export AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" >> /home/ec2-user/.bashrc
-                - export AWS_REGION="$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | grep region | cut -d'"' -f4)" && echo "export AWS_REGION=${AWS_REGION}" >> /home/ec2-user/.bashrc
-                - echo "export AWS_DEFAULT_REGION=\$AWS_REGION" >>  /home/ec2-user/.bashrc
-                - echo 'aws sts get-caller-identity --query Arn | grep eks-blueprints-for-terraform-workshop-admin -q || aws cloud9 update-environment  --environment-id $C9_PID --managed-credentials-action DISABLE' >> /home/ec2-user/.bashrc
-                - rm -vf /home/ec2-user/.aws/credentials
-                - sudo chown -R ec2-user:ec2-user /home/ec2-user/
-                - echo "Bootstrap completed with return code $?"
-                - shutdown -r +1
